@@ -33,11 +33,13 @@ registars, sp the stack pointer and of, the offset register.
 | Instruction          | Opcode (in binary)    | Description                      | Arguments                                |
 | -------------------- | --------------------- | -------------------------------- | ---------------------------------------- |
 | term                 |  0000 0000            | Halts the machine                | None                                     |
-| move                 |  0000 0001            | moves data                       | 1 byte first 4 bits dest last 4 source   |
-| jump                 |  0000 0010            | jumps to memory address          | 2 bytes address to jump too              |
-| add                  |  0000 0011            | adds two registers together      | 1 byte first 4 bits dest last 4 source   |
-| sub                  |  0000 0100            | subtracts to registers           | 1 byte first 4 bits dest last 4 source   |
+| push                 |  0000 0001            | pushs address onto stack         | 1 byte last three bytes contain register |
+| pop                  |  0000 0010            | pops address of of stack         | 1 byte last three bytes contain register |`
+| move                 |  0000 0011            | moves data                       | 1 byte first 4 bits dest last 4 source   |
+| jump                 |  0000 0100            | jumps to memory address          | 2 bytes address to jump too              |
 | call                 |  0000 0101            | calls address                    | 2 butes address to jump too              |
-| ret                  |  0000 0111            | pops address of of stack into ip | None                                     |
-| push                 |  0000 1000            | pushs address onto stack         | 1 byte last three bytes contain register |
-| pop                  |  0000 1001            | pops address of of stack         | 1 byte last three bytes contain register |`
+| ret                  |  0000 0110            | pops address of of stack into ip | None                                     |
+| addu                 |  0000 0111            | adds two registers together      | 1 byte first 4 bits dest last 4 source   |
+| adds                 |  0000 1000            | adds signed                      | 1 byte first 4 bits dest last 4 source   |
+| sub                  |  0000 1001            | subtracts to registers           | 1 byte first 4 bits dest last 4 source   |
+
