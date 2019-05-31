@@ -75,3 +75,30 @@ opcode:
 0000 0011 [dest reg][src reg]   0000 0000   0000 0000
 ```
 
+# movc
+Moves constant value into a register
+```
+opcode:
+0000 0100 [dest reg]  [constant value 2 bytes]
+```
+
+# jump
+jumps to specified address
+```
+opcode:
+0000 0101 [2 bytes dest address]
+```
+
+# call
+jumps to a specified address and then pushes next instruction on stack. It pushes the current value of ip+=1
+```
+opcode:
+0000 0110 [2 bytes dest address]
+```
+
+# ret
+jumps to instruction pushed off of stack. It pushes a value off of the stack into ip and goes to it.
+```
+opcode:
+0000 0111  0000 0000   0000 0000  0000 0000
+```
