@@ -25,7 +25,7 @@ registars, sp the stack pointer and of, the offset register.
 | rd (general purpose)     |   011              |
 | sp (stack pointer)       |   100              |
 | of (offset register)     |   101              |
-| unused                   |   110              |
+| ip (instruction pointer) |   110              |
 | unused                   |   111              |
 
 # Instruction listing
