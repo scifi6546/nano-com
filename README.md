@@ -1,21 +1,21 @@
-## nano-com
-# What is this?
+### nano-com
+## What is this?
 This is a project to build a fictional 16 bit console. It will have a limited amount of memory (lets say 1MB), 
 a simple instruction set to make it easy to program, an easy way to share and load games and a screen keyboard and mouse interface.
 
-# Specs of computer
-The computer will have 1 MB of addressible ram. An interface for a cartridge and non volitile storage and a cpu with a limited speed.
+## Specs of computer
+The computer will have 1 MB of addressable ram. An interface for a cartridge and non volatile storage and a cpu with a limited speed.
 
-# Instruction Set
+## Instruction Set
 Details still to be determined but I am thinking of having a very simple instruction set. 
 
-# Opcode Format:
+## Opcode Format:
 A full instruction consists of (except for jmp) two bytes. The first specifies the instruction used and the second byte are 
 the arguments of the instruction
 
-# Registers
-There are 4 general purpose registars ra rb rc and rd. These registers can be used for anything. There are two special purpose
-registars, sp the stack pointer and of, the offset register.
+## Registers
+There are 4 general purpose registers ra rb rc and rd. These registers can be used for anything. There are two special purpose
+registers, sp the stack pointer and of, the offset register.
 
 | Register                 | Opcode (in binary) |
 | ------------------------ | ------------------ |
@@ -28,7 +28,7 @@ registars, sp the stack pointer and of, the offset register.
 | ip (instruction pointer) |   110              |
 | unused                   |   111              |
 
-# Instruction listing
+## Instruction listing
 
 | Instruction          | Opcode (in binary)    | Description                      | Arguments                                |
 | -------------------- | --------------------- | -------------------------------- | ---------------------------------------- |
@@ -42,4 +42,17 @@ registars, sp the stack pointer and of, the offset register.
 | addu                 |  0000 0111            | adds two registers together      | 1 byte first 4 bits dest last 4 source   |
 | adds                 |  0000 1000            | adds signed                      | 1 byte first 4 bits dest last 4 source   |
 | sub                  |  0000 1001            | subtracts to registers           | 1 byte first 4 bits dest last 4 source   |
+
+## Instructions Detail
+
+# term
+This just terminates the machine.
+Opcode: 
+0000 0000  0000 0000  0000 0000
+
+# push
+Pushes reg onto stack. sp is incremented by two bytes (by two)
+0000 0001   0000 [reg]
+
+
 
