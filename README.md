@@ -102,3 +102,16 @@ jumps to instruction pushed off of stack. It pushes a value off of the stack int
 opcode:
 0000 0111  0000 0000   0000 0000  0000 0000
 ```
+# addu
+adds two unsigned registers together. result is stored in dest
+```
+opcode:
+0000 1000 [dest] [src]  0000 0000  0000 0000
+```
+
+# adds
+adds two signed registers together. result is stored in dest
+```
+opcode:
+0000 1001 [dest] [src]   0000 0000  0000 0000
+```
