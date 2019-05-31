@@ -50,21 +50,21 @@ registers, sp the stack pointer and of, the offset register.
 This just terminates the machine.
 ```
 Opcode: 
-0000 0000  0000 0000  0000 0000
+0000 0000  0000 0000  0000 0000   0000 0000
 ````
 
 # push
 Pushes reg onto stack. sp is incremented by two bytes (by two)
 ```
 opcode:
-0000 0001   0000 [reg]  0000 0000
+0000 0001   0000 [reg]  0000 0000   0000 0000
 ```
 
 # pop
 Pops data from stack into register. sp is decremented by two
 ```
 opcode:
-0000 0010  0000 [reg] 0000 0000
+0000 0010  0000 [reg] 0000 0000   0000 0000
 
 ```
 
@@ -86,14 +86,14 @@ opcode:
 jumps to specified address
 ```
 opcode:
-0000 0101 [2 bytes dest address]
+0000 0101 [2 bytes dest address]  0000 0000
 ```
 
 # call
 jumps to a specified address and then pushes next instruction on stack. It pushes the current value of ip+=1
 ```
 opcode:
-0000 0110 [2 bytes dest address]
+0000 0110 [2 bytes dest address]   0000 0000
 ```
 
 # ret
