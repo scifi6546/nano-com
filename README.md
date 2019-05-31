@@ -47,12 +47,19 @@ registers, sp the stack pointer and of, the offset register.
 
 # term
 This just terminates the machine.
+```
 Opcode: 
 0000 0000  0000 0000  0000 0000
+````
 
 # push
 Pushes reg onto stack. sp is incremented by two bytes (by two)
+```
+opcode:
 0000 0001   0000 [reg]
+```
+
+# pop
 
 
 
