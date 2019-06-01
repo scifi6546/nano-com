@@ -17,16 +17,16 @@ the arguments of the instruction
 There are 4 general purpose registers ra rb rc and rd. These registers can be used for anything. There are two special purpose
 registers, sp the stack pointer and of, the offset register.
 
-| Register                 | Opcode (in binary) |
+| Register                 | Opcode             |
 | ------------------------ | ------------------ |
-| ra (general purpose)     |   000              |
-| rb (general purpose)     |   001              |
-| rc (general purpose      |   010              |
-| rd (general purpose)     |   011              |
-| sp (stack pointer)       |   100              |
-| of (offset register)     |   101              |
-| ip (instruction pointer) |   110              |
-| unused                   |   111              |
+| ra (general purpose)     |   000 (0x0)        |
+| rb (general purpose)     |   001 (0x1)        |
+| rc (general purpose      |   010 (0x2)        |
+| rd (general purpose)     |   011 (0x3)        |
+| sp (stack pointer)       |   100 (0x4)        |
+| of (offset register)     |   101 (0x5)        |
+| ip (instruction pointer) |   110 (0x6)        |
+| unused                   |   111 (0x7)        |
 
 ## Instruction listing
 
