@@ -6,15 +6,15 @@ enum INSTRUCTIONS{TERM=0x00,PUSH=0x01,POP=0x02,MOVE=0x03,
                 ADDS=0x09,SUB=0x0A};
 struct Token{
     INSTRUCTIONS inst=TERM;
-    char arg1=0x0;
-    char arg2=0x0;
-    char arg3=0x0;
+    unsigned char arg1=0x0;
+    unsigned char arg2=0x0;
+    unsigned char arg3=0x0;
     int address=0x0;
 };
 //loads hex data of file
-std::vector<char> loadFile(std::string file_name){
+std::vector<unsigned char> loadFile(std::string file_name){
     FILE *romContents = fopen(file_name.c_str(),"r");
-    std::vector<char> file_contents;
+    std::vector<unsigned char> file_contents;
     char temp;
     while(0==0){
         temp=fgetc(romContents);
@@ -25,8 +25,8 @@ std::vector<char> loadFile(std::string file_name){
     }
 }
 //tokenizes the rom file to make it easy to access
-std::vector<Token> tokenize(std::vector<char> rom){
-    if(rom.size()%3!=0){
+std::vector<Token> tokenize(std::vector<unsigned char> rom){
+    if(rom.size()%4!=0){
         printf("ERROR rom size not correct\n");
         return std::vector<Token>{};
     }
@@ -34,7 +34,7 @@ std::vector<Token> tokenize(std::vector<char> rom){
     for(int i=0;i<rom.size();i+=4){
         Token temp;
         temp.inst=(INSTRUCTIONS) rom[i];
-        temp.arg1=(char) rom[i+1];
+        temp.arg1=rom[i+1];
         temp.arg2=rom[i+2];
         temp.arg3=rom[i+3];
         program.push_back(temp);
@@ -43,7 +43,12 @@ std::vector<Token> tokenize(std::vector<char> rom){
 }
 void printProgram(std::vector<Token> program){
     for(int i =0;i<program.size();i++){
-        printf("Address: %i, Instruction: %i, Arg 1: %i, Arg 2: %i, Arg 3: %i\n",
-        program[i].address,program[i].arg1,program[i].arg2,program[i].arg3);
+        printf("Address: %i, Instruction: %i, Arg 1: %u, Arg 2: %u, Arg 3: %u\n",
+        program[i].address,program[i].inst,program[i].arg1,program[i].arg2,program[i].arg3);
     }
+}
+int main(){
+    std::vector<unsigned char> file = loadFile("rom.nano");
+    std::vector<Token> prog= tokenize(file);
+    printProgram(prog);
 }
