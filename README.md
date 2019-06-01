@@ -30,19 +30,19 @@ registers, sp the stack pointer and of, the offset register.
 
 ## Instruction listing
 
-| Instruction          | Opcode (in binary)    | Description                      | Arguments                                |
+| Instruction          | Opcode                | Description                      | Arguments                                |
 | -------------------- | --------------------- | -------------------------------- | ---------------------------------------- |
-| term                 |  0000 0000            | Halts the machine                | None                                     |
-| push                 |  0000 0001            | pushs address onto stack         | 1 byte last three bytes contain register |
-| pop                  |  0000 0010            | pops address of of stack         | 1 byte last three bytes contain register |`
-| move                 |  0000 0011            | moves data                       | 1 byte first 4 bits dest last 4 source   |
-| movc                 |  0000 0100            | moves constant into register     | 1st byte register 2 bytes constant       |
-| jump                 |  0000 0101            | jumps to memory address          | 2 bytes address to jump too              |
-| call                 |  0000 0110            | calls address                    | 2 butes address to jump too              |
-| ret                  |  0000 0111            | pops address of of stack into ip | None                                     |
-| addu                 |  0000 1000            | adds two registers together      | 1 byte first 4 bits dest last 4 source   |
-| adds                 |  0000 1001            | adds signed                      | 1 byte first 4 bits dest last 4 source   |
-| sub                  |  0000 1010            | subtracts to registers           | 1 byte first 4 bits dest last 4 source   |
+| term                 |  0000 0000  (0x00)    | Halts the machine                | None                                     |
+| push                 |  0000 0001  (0x01)    | pushs address onto stack         | 1 byte last three bytes contain register |
+| pop                  |  0000 0010  (0x02)    | pops address of of stack         | 1 byte last three bytes contain register |`
+| move                 |  0000 0011  (0x03)    | moves data                       | 1 byte first 4 bits dest last 4 source   |
+| movc                 |  0000 0100  (0x04)    | moves constant into register     | 1st byte register 2 bytes constant       |
+| jump                 |  0000 0101  (0x05)    | jumps to memory address          | 2 bytes address to jump too              |
+| call                 |  0000 0110  (0x06)    | calls address                    | 2 butes address to jump too              |
+| ret                  |  0000 0111  (0x07)    | pops address of of stack into ip | None                                     |
+| addu                 |  0000 1000  (0x08)    | adds two registers together      | 1 byte first 4 bits dest last 4 source   |
+| adds                 |  0000 1001  (0x09)    | adds signed                      | 1 byte first 4 bits dest last 4 source   |
+| sub                  |  0000 1010  (0x0A)    | subtracts to registers           | 1 byte first 4 bits dest last 4 source   |
 
 ## Instructions Detail
 
