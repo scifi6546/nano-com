@@ -27,6 +27,8 @@ registers, sp the stack pointer and of, the offset register.
 | of (offset register)     |   101 (0x5)        |
 | ip (instruction pointer) |   110 (0x6)        |
 | unused                   |   111 (0x7)        |
+
+
 The width of the opcode is four bits but the opcode shown only takes up three. The first bit specifies whether or not the data at the memory address pointed by the register is used or if the value of the address itself will be used.
 for example
 ```
