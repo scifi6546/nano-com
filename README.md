@@ -13,7 +13,7 @@ Details still to be determined but I am thinking of having a very simple instruc
 A full instruction consists of (except for jmp) two bytes. The first specifies the instruction used and the second byte are 
 the arguments of the instruction
 
-## Registers
+## Registers 
 There are 4 general purpose registers ra rb rc and rd. These registers can be used for anything. There are two special purpose
 registers, sp the stack pointer and of, the offset register.
 
@@ -27,6 +27,13 @@ registers, sp the stack pointer and of, the offset register.
 | of (offset register)     |   101 (0x5)        |
 | ip (instruction pointer) |   110 (0x6)        |
 | unused                   |   111 (0x7)        |
+The width of the opcode is four bits but the opcode shown only takes up three. The first bit specifies whether or not the data at the memory address pointed by the register is used or if the value of the address itself will be used.
+for example
+```
+0000 0011    1000 0001    00000 0000  0000 0000    or in assembly   move  [ra] rb moves the data pointed by ra to rb.
+````
+
+
 
 ## Instruction listing
 
@@ -44,6 +51,13 @@ registers, sp the stack pointer and of, the offset register.
 | adds                 |  0000 1001  (0x09)    | adds signed                      | 1 byte first 4 bits dest last 4 source   |
 | sub                  |  0000 1010  (0x0A)    | subtracts to registers           | 1 byte first 4 bits dest last 4 source   |
 
+## Offset
+Inorder to access the full range of memory sp is used as the first 4 bytes of the regiser.
+a typical access operation looks like:
+````
+sp                        |      register used
+0000 0000   00000 MEMORY  | 0110 1101  1110 1111
+````
 ## Instructions Detail
 
 # term
