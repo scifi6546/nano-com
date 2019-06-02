@@ -126,6 +126,12 @@ void Cpu::run_program(){
                 _ram.setShort(getRegister(program[address].arg1),_of,data);
             }
             break;
+        case JUMP:
+            unsigned short addr=program[address].arg1<<8;
+            addr+=program[address].arg2;
+            _ip=addr;
+            printf("jumped\n");
+            break;
         default:
             break;
         }
