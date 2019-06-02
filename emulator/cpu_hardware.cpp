@@ -114,6 +114,18 @@ void Cpu::run_program(){
             }
             printf("moved\n");
             break;
+        case MOVC:
+            printf("movc'd\n");
+            char access_mem_arg1 = program[address].arg1>>3;
+            short data=program[address].arg2<<8;
+            data+=program[address].arg3;
+            if(access_mem_arg1==0){
+                setRegister(program[address].arg1,data);
+            }
+            if(access_mem_arg1==1){
+                _ram.setShort(getRegister(program[address].arg1),_of,data);
+            }
+            break;
         default:
             break;
         }
