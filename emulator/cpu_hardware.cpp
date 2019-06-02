@@ -95,6 +95,23 @@ void Cpu::run_program(){
             address++;
             break;
         case MOVE:
+            char access_mem_arg1 = program[address].arg1>>3;
+            char access_mem_arg2 = program[address].arg2>>3;
+
+            short arg2_data;
+            if(access_mem_arg2==1){
+                arg2_data=_ram.getShort(getRegister(program[address].arg2),_of);
+            }
+            if(access_mem_arg2==0){
+                arg2_data=getRegister(program[address].arg2);
+            }
+
+            if(access_mem_arg1==1){
+                _ram.setShort(getRegister(program[address].arg1),_of,arg2_data);
+            }
+            if(access_mem_arg1==0){
+                setRegister(program[address].arg1,arg2_data);
+            }
             printf("moved\n");
             break;
         default:
@@ -161,4 +178,5 @@ unsigned short Cpu::getRegister(char register_code){
 Cpu::Cpu(std::string rom_file){
     std::vector<unsigned char> rom = loadFile(rom_file);
     this->program=tokenize(rom);
+    run_program();
 }
