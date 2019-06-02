@@ -99,7 +99,7 @@ opcode:
 ```
 
 # jump
-jumps to specified address
+jumps to specified address. It sets the ip to the address specified.
 ```
 opcode:
 0000 0101 [2 bytes dest address]  0000 0000
