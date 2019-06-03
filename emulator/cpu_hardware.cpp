@@ -1,4 +1,5 @@
 #include "cpu_hardware.hpp"
+#include <stdio.h>
 std::vector<unsigned char> loadFile(std::string file_name){
     FILE *romContents = fopen(file_name.c_str(),"r");
     std::vector<unsigned char> file_contents;
