@@ -1,3 +1,4 @@
 language: cpp
 os: linux
 compiler: gcc
+before_install: cd emulator
