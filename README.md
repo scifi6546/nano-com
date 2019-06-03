@@ -1,4 +1,5 @@
 ### nano-com
+[![Build Status](https://travis-ci.org/scifi6546/nano-com.svg?branch=master)](https://travis-ci.org/scifi6546/nano-com)
 ## What is this?
 This is a project to build a fictional 16 bit console. It will have a limited amount of memory (lets say 1MB), 
 a simple instruction set to make it easy to program, an easy way to share and load games and a screen keyboard and mouse interface.
