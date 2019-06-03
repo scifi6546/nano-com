@@ -23,12 +23,14 @@ class Memory{
         void setShort(short addr, short offset,unsigned short to_set);
     private:
         const static int MEM_SIZE=0x100000;
-        unsigned char _data[MEM_SIZE];
+        unsigned char _data[MEM_SIZE]={0};
 };
 class Cpu{
     enum REGISTERS{RA=0x00,RB=0x01,RC=0x02,RD=0x03,SP=0x04,OF=0x05,IP=0x06};
     public:
         Cpu(std::string rom_file_name);
+        //starts error handling routine
+        void regError();
     private:
         void run_program();
         //sets data in register

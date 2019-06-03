@@ -50,13 +50,19 @@ void Memory::setChar(short addr, short offset,unsigned char to_set){
     //clearing upper 12 bits
     offset=offset<<12;
     offset=offset>>12;
-    
+    unsigned int address=0;
     //placing offset
-    int address=offset;
+    address+=offset;
     address<<16;
     address+=addr;
+    printf("to_set: %i\n",to_set);
+    if(to_set==152){
+        printf("to_set not rignt\n");
+    }
     if(address<MEM_SIZE){
        _data[address]=to_set;
+    }else{
+        printf("wrong memory accessed\n");
     }
 
 }
@@ -91,7 +97,7 @@ void Cpu::run_program(){
         }
         case POP:{
             printf("poped data\n");
-            setRegister(program[_ip].arg1,_ram.getShort(_sp,_of));
+            pop(program[_ip].arg1);
             _ip++;
             break;
         }
@@ -164,9 +170,11 @@ void Cpu::run_program(){
     }
 }
 void Cpu::push(char register_code){
-    printf("pushed onto stack\n");
     _sp++;
     _ram.setShort(_sp,_of,getRegister(register_code));
+}
+void Cpu::pop(char register_code){
+    setRegister(register_code,popValue());
 }
 unsigned short Cpu::popValue(){
     unsigned short out=_ram.getShort(_sp,_of);
