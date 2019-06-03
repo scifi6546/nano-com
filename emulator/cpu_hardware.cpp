@@ -75,67 +75,107 @@ void Memory::setShort(short addr, short offset,unsigned short to_set){
     setChar(addr+1,offset,back_half);
 };
 void Cpu::run_program(){
-    int address=0;
     while(0==0){
-        switch (this->program[address].inst)
+        switch (this->program[_ip].inst)
         {
-        case TERM:
+        case TERM:{
             printf("program terminated\n");
             return;
             break;
-        case PUSH:
+        }
+        case PUSH:{
+            push(program[_ip].arg1);
             printf("pushed onto stack\n");
-            _sp++;
-            _ram.setShort(_sp,_of,getRegister(program[address].arg1));
-            address++;
+            _ip++;
             break;
-        case POP:
+        }
+        case POP:{
             printf("poped data\n");
-            setRegister(program[address].arg1,_ram.getShort(_sp,_of));
-            address++;
+            setRegister(program[_ip].arg1,_ram.getShort(_sp,_of));
+            _ip++;
             break;
-        case MOVE:
-            char access_mem_arg1 = program[address].arg1>>3;
-            char access_mem_arg2 = program[address].arg2>>3;
+        }
+        case MOVE:{
+            char access_mem_arg1 = program[_ip].arg1>>3;
+            char access_mem_arg2 = program[_ip].arg2>>3;
 
             short arg2_data;
             if(access_mem_arg2==1){
-                arg2_data=_ram.getShort(getRegister(program[address].arg2),_of);
+                arg2_data=_ram.getShort(getRegister(program[_ip].arg2),_of);
             }
             if(access_mem_arg2==0){
-                arg2_data=getRegister(program[address].arg2);
+                arg2_data=getRegister(program[_ip].arg2);
             }
 
             if(access_mem_arg1==1){
-                _ram.setShort(getRegister(program[address].arg1),_of,arg2_data);
+                _ram.setShort(getRegister(program[_ip].arg1),_of,arg2_data);
             }
             if(access_mem_arg1==0){
-                setRegister(program[address].arg1,arg2_data);
+                setRegister(program[_ip].arg1,arg2_data);
             }
             printf("moved\n");
+            _ip++;
             break;
-        case MOVC:
+        }
+        case MOVC:{
             printf("movc'd\n");
-            char access_mem_arg1 = program[address].arg1>>3;
-            short data=program[address].arg2<<8;
-            data+=program[address].arg3;
+            char access_mem_arg1 = program[_ip].arg1>>3;
+            short data=program[_ip].arg2<<8;
+            data+=program[_ip].arg3;
             if(access_mem_arg1==0){
-                setRegister(program[address].arg1,data);
+                setRegister(program[_ip].arg1,data);
             }
             if(access_mem_arg1==1){
-                _ram.setShort(getRegister(program[address].arg1),_of,data);
+                _ram.setShort(getRegister(program[_ip].arg1),_of,data);
             }
+            _ip++;
             break;
-        case JUMP:
-            unsigned short addr=program[address].arg1<<8;
-            addr+=program[address].arg2;
+        }
+        case JUMP:{
+            unsigned short addr=program[_ip].arg1<<8;
+            addr+=program[_ip].arg2;
             _ip=addr;
             printf("jumped\n");
             break;
+        }
+        case CALL:{
+            pushValue(_ip+1);
+            unsigned short addr=program[_ip].arg1<<8;
+            addr+=program[_ip].arg2;
+            _ip=addr;
+            printf("called\n");
+            break;
+        }
+        case RET:{
+            _ip=popValue();
+            break;
+        }
+        case ADDU:{
+            printf("addu\n");
+            unsigned short value_to_add=getRegister(program[_ip].arg2);
+            unsigned short original_value=getRegister(program[_ip].arg1);
+            setRegister(program[_ip].arg1,original_value+value_to_add);
+            _ip++;
+            break;  
+        }
         default:
             break;
         }
     }
+}
+void Cpu::push(char register_code){
+    printf("pushed onto stack\n");
+    _sp++;
+    _ram.setShort(_sp,_of,getRegister(register_code));
+}
+unsigned short Cpu::popValue(){
+    unsigned short out=_ram.getShort(_sp,_of);
+    _sp--;
+    return out;
+}
+void Cpu::pushValue(unsigned short in){
+    _sp++;
+    _ram.setShort(_sp,_of,in);
 }
 void Cpu::setRegister(char register_code,short data){
     switch(register_code){

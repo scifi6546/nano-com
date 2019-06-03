@@ -45,6 +45,15 @@ class Cpu{
         short _ip=0;
         Memory _ram;
         std::vector<Token> program;
+
+        //runs push instruction
+        void push(char register_code);
+        //pushes value onto stacl
+        void pushValue(unsigned short value);
+        //runs pop instruction
+        void pop(char register_code);
+        //pops value off of stack and returns short
+        unsigned short popValue();
 };
 //loads hex data of file
 std::vector<unsigned char> loadFile(std::string file_name);
