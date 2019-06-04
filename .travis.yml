@@ -1,4 +1,8 @@
 language: cpp
-os: linux
+os: trusty
+addons:
+        apt:
+                packages:
+                        googletest
 compiler: gcc
 before_install: cd emulator
