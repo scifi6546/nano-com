@@ -6,4 +6,4 @@ addons:
                         googletest
                         libgtest-dev
 compiler: gcc
-before_install: cd emulator&& sudo add-apt-repository universe && sudo apt install libgtest-dev
+before_install: cd emulator&& sudo add-apt-repository universe && sudo apt update && sudo apt install libgtest-dev
