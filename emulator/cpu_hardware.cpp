@@ -247,3 +247,7 @@ Cpu::Cpu(std::string rom_file){
     this->program=tokenize(rom);
     run_program();
 }
+Cpu::Cpu(std::vector<unsigned char> rom){
+    this->program=tokenize(rom);
+    run_program();
+}

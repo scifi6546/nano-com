@@ -29,6 +29,9 @@ class Cpu{
     enum REGISTERS{RA=0x00,RB=0x01,RC=0x02,RD=0x03,SP=0x04,OF=0x05,IP=0x06};
     public:
         Cpu(std::string rom_file_name);
+
+        //starts cpu using a rom used for testing
+        Cpu(std::vector<unsigned char> rom);
         //starts error handling routine
         void regError();
     private:

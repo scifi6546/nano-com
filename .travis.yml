@@ -4,5 +4,6 @@ addons:
         apt:
                 packages:
                         googletest
+                        libgtest-dev
 compiler: gcc
 before_install: cd emulator
