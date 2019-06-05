@@ -25,6 +25,6 @@ TEST(FooTest,TESTING_TERM){
 	std::vector<unsigned char> test={0x00,0x00,0x00,0x00};
 	Cpu test_cpu(test);
 	std::vector<unsigned short> test1=test_cpu.getRegisters();
-	std::vector<unsigned short> compare_regs = {0x0,0x0,0x0,0x0,0x0,0x0,0x0};
+	std::vector<unsigned short> compare_regs = {0x0,0x0,0x0,0x0,0x0,0x0,0x1};
 	ASSERT_EQ(test1,compare_regs);
 }
