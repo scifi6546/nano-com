@@ -3,5 +3,6 @@ main: main.cpp cpu_hardware.cpp
 	g++ $(CFLAGS) cpu_hardware.cpp main.cpp -o out
 .PHONY: test
 test: test/test.cpp cpu_hardware.cpp
-	g++ $(CFLAGS) cpu_hardware.cpp test/test.cpp -o out
-	./out
+	cmake -g "Unix Makefile" test/build/CMakeLists.txt
+	make -C test/build
+	./test/build/executeTests

@@ -34,6 +34,10 @@ class Cpu{
         Cpu(std::vector<unsigned char> rom);
         //starts error handling routine
         void regError();
+
+        // gets registers at end of program execution
+        // for use in testing only
+        std::vector<unsigned short> getRegisters();
     private:
         void run_program();
         //sets data in register
@@ -41,13 +45,13 @@ class Cpu{
         //gets data from register
         unsigned short getRegister(char register_code);
     //registers
-        short _ra=0;
-        short _rb=0;
-        short _rc=0;
-        short _rd=0;
-        short _sp=0;
-        short _of=0;
-        short _ip=0;
+        unsigned short _ra=0;
+        unsigned short _rb=0;
+        unsigned short _rc=0;
+        unsigned short _rd=0;
+        unsigned short _sp=0;
+        unsigned short _of=0;
+        unsigned short _ip=0;
         Memory _ram;
         std::vector<Token> program;
 

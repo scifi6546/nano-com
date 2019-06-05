@@ -251,3 +251,7 @@ Cpu::Cpu(std::vector<unsigned char> rom){
     this->program=tokenize(rom);
     run_program();
 }
+std::vector<unsigned short> Cpu::getRegisters(){
+    std::vector<unsigned short> out={_ra,_rb,_rc,_rd,_sp,_of,_ip};
+    return out;
+}
