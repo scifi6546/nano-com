@@ -1,5 +1,5 @@
 .vscode
-.swp
+*.swp
 out
 CMakeFiles
 cmake_install.cmake
