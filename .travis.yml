@@ -1,5 +1,6 @@
 language: cpp
-os: xenial
+os: linux
+dist: xenial
 addons:
         apt:
                 packages:
