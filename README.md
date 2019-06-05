@@ -1,4 +1,4 @@
-### nano-com
+# nano-com
 [![Build Status](https://travis-ci.org/scifi6546/nano-com.svg?branch=master)](https://travis-ci.org/scifi6546/nano-com)
 ## What is this?
 This is a project to build a fictional 16 bit console. It will have a limited amount of memory (lets say 1MB), 
@@ -37,7 +37,6 @@ for example
 ````
 
 
-
 ## Instruction listing
 
 | Instruction          | Opcode                | Description                      | Arguments                                |
@@ -63,21 +62,21 @@ sp                        |      register used
 ````
 ## Instructions Detail
 
-# term
+## term
 This just terminates the machine.
 ```
 Opcode: 
 0000 0000  0000 0000  0000 0000   0000 0000
 ````
 
-# push
+## push
 Pushes reg onto stack. sp is incremented by two bytes (by two)
 ```
 opcode:
 0000 0001   0000 [reg]  0000 0000   0000 0000
 ```
 
-# pop
+## pop
 Pops data from stack into register. sp is decremented by two
 ```
 opcode:
@@ -85,48 +84,49 @@ opcode:
 
 ```
 
-# move
+## move
 Moves data from one register into another register
 ```
 opcode:
 0000 0011 [dest reg][src reg]   0000 0000   0000 0000
 ```
 
-# movc
+## movc
 Moves constant value into a register
 ```
 opcode:
 0000 0100 [dest reg]  [constant value 2 bytes]
 ```
 
-# jump
+## jump
 jumps to specified address. It sets the ip to the address specified.
 ```
 opcode:
 0000 0101 [2 bytes dest address]  0000 0000
 ```
-
-# call
+### Note on jump address
+The address used by jump is the index of the first byte of the isntruction jumped to divided by 4. 4 is the width of all opcodes
+## call
 jumps to a specified address and then pushes next instruction on stack. It pushes the current value of ip+=1
 ```
 opcode:
 0000 0110 [2 bytes dest address]   0000 0000
 ```
 
-# ret
+## ret
 jumps to instruction pushed off of stack. It pushes a value off of the stack into ip and goes to it.
 ```
 opcode:
 0000 0111  0000 0000   0000 0000  0000 0000
 ```
-# addu
+## addu
 adds two unsigned registers together. result is stored in dest
 ```
 opcode:
 0000 1000 [dest] [src]  0000 0000  0000 0000
 ```
 
-# adds
+## adds
 adds two signed registers together. result is stored in dest
 ```
 opcode:
