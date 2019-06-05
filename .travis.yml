@@ -1,10 +1,7 @@
 language: cpp
-os: linux
-dist: bionic
-addons:
-        apt:
-                packages:
-                        googletest
-                        libgtest-dev
-compiler: gcc
-before_install: cd emulator
+services:
+ - docker
+before_install:
+        - docker pull scifi6546/nano-com 
+        - docker run 
+        - docker scifi6546/nano-com
