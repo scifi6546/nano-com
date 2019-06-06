@@ -239,11 +239,13 @@ unsigned short Cpu::getRegister(char register_code){
     }
 }
 std::vector<unsigned char> Cpu::splitRegCode(unsigned char reg_byte){
+    printf("reg_byte:%i\n",reg_byte);
 //1111 0000 = F0
-    unsigned char lower = reg_byte^0xF0;
+    unsigned char lower = reg_byte&0x0F;
     //0000 1111 = 0F
-    unsigned char upper = reg_byte^0x0F;
+    unsigned char upper = reg_byte&0xF0;
     upper=upper>>4;
+    //printf("upper: %i, lower: %i\n",upper,lower);
     return {upper,lower};
 }
 Cpu::Cpu(std::string rom_file){
