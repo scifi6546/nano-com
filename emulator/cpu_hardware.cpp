@@ -56,7 +56,7 @@ void Memory::setChar(short addr, short offset,unsigned char to_set){
     address+=offset;
     address<<16;
     address+=addr;
-    printf("to_set: %i\n",to_set);
+    //printf("to_set: %i\n",to_set);
     if(to_set==152){
         printf("to_set not rignt\n");
     }
@@ -86,18 +86,18 @@ void Cpu::run_program(){
         switch (this->program[_ip].inst)
         {
         case TERM:{
-            printf("program terminated\n");
+            //printf("program terminated\n");
             return;
             break;
         }
         case PUSH:{
             push(program[_ip].arg1);
-            printf("pushed onto stack\n");
+            //printf("pushed onto stack\n");
             _ip++;
             break;
         }
         case POP:{
-            printf("poped data\n");
+            //printf("poped data\n");
             pop(program[_ip].arg1);
             _ip++;
             break;
@@ -120,12 +120,12 @@ void Cpu::run_program(){
             if(access_mem_arg1==0){
                 setRegister(program[_ip].arg1,arg2_data);
             }
-            printf("moved\n");
+            //printf("moved\n");
             _ip++;
             break;
         }
         case MOVC:{
-            printf("movc'd\n");
+            //printf("movc'd\n");
             char access_mem_arg1 = program[_ip].arg1>>3;
             short data=program[_ip].arg2<<8;
             data+=program[_ip].arg3;
@@ -142,7 +142,7 @@ void Cpu::run_program(){
             unsigned short addr=program[_ip].arg1<<8;
             addr+=program[_ip].arg2;
             _ip=addr;
-            printf("jumped\n");
+            //printf("jumped\n");
             break;
         }
         case CALL:{
@@ -150,7 +150,7 @@ void Cpu::run_program(){
             unsigned short addr=program[_ip].arg1<<8;
             addr+=program[_ip].arg2;
             _ip=addr;
-            printf("called\n");
+            //printf("called\n");
             break;
         }
         case RET:{
@@ -158,7 +158,7 @@ void Cpu::run_program(){
             break;
         }
         case ADDU:{
-            printf("addu\n");
+            //printf("addu\n");
             unsigned short value_to_add=getRegister(program[_ip].arg2);
             unsigned short original_value=getRegister(program[_ip].arg1);
             setRegister(program[_ip].arg1,original_value+value_to_add);
