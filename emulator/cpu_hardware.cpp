@@ -91,50 +91,34 @@ void Cpu::run_program(){
             break;
         }
         case PUSH:{
-            push(program[_ip].arg1);
+            unsigned char reg_code=splitRegCode(program[_ip].arg1)[1];
+            push(reg_code);
             //printf("pushed onto stack\n");
             _ip++;
             break;
         }
         case POP:{
             //printf("poped data\n");
-            pop(program[_ip].arg1);
+            unsigned char reg_code=splitRegCode(program[_ip].arg1)[1];
+            pop(reg_code);
             _ip++;
             break;
         }
         case MOVE:{
-            char access_mem_arg1 = program[_ip].arg1>>3;
-            char access_mem_arg2 = program[_ip].arg2>>3;
-
-            short arg2_data;
-            if(access_mem_arg2==1){
-                arg2_data=_ram.getShort(getRegister(program[_ip].arg2),_of);
-            }
-            if(access_mem_arg2==0){
-                arg2_data=getRegister(program[_ip].arg2);
-            }
-
-            if(access_mem_arg1==1){
-                _ram.setShort(getRegister(program[_ip].arg1),_of,arg2_data);
-            }
-            if(access_mem_arg1==0){
-                setRegister(program[_ip].arg1,arg2_data);
-            }
-            //printf("moved\n");
+            std::vector<unsigned char> reg_codes=splitRegCode(program[_ip].arg1);
+            unsigned char dest = reg_codes[0];
+            unsigned char src = reg_codes[1];
+            unsigned short src_value = getRegister(src);
+            setRegister(dest,src_value); 
             _ip++;
             break;
         }
         case MOVC:{
             //printf("movc'd\n");
-            char access_mem_arg1 = program[_ip].arg1>>3;
-            short data=program[_ip].arg2<<8;
+            unsigned char dest_reg=splitRegCode(program[_ip].arg1)[1];
+            unsigned short data=program[_ip].arg2<<8;
             data+=program[_ip].arg3;
-            if(access_mem_arg1==0){
-                setRegister(program[_ip].arg1,data);
-            }
-            if(access_mem_arg1==1){
-                _ram.setShort(getRegister(program[_ip].arg1),_of,data);
-            }
+            setRegister(dest_reg,data);
             _ip++;
             break;
         }
@@ -159,9 +143,14 @@ void Cpu::run_program(){
         }
         case ADDU:{
             //printf("addu\n");
-            unsigned short value_to_add=getRegister(program[_ip].arg2);
-            unsigned short original_value=getRegister(program[_ip].arg1);
-            setRegister(program[_ip].arg1,original_value+value_to_add);
+            std::vector<unsigned char> reg_codes=splitRegCode(program[_ip].arg1);
+            
+            unsigned short dest_code=reg_codes[0];
+            unsigned short src_code=reg_codes[1];
+
+            unsigned short dest_value=getRegister(dest_code);
+            unsigned short src_value=getRegister(src_code);
+            setRegister(src_code,src_value+dest_value);
             _ip++;
             break;  
         }
@@ -187,31 +176,38 @@ void Cpu::pushValue(unsigned short in){
     _ram.setShort(_sp,_of,in);
 }
 void Cpu::setRegister(char register_code,short data){
-    switch(register_code){
-        case RA:
-            _ra=data;
-            break;
-        case RB:
-            _rb=data;
-            break;
-        case RC:
-            _rc=data;
-            break;
-        case RD:
-            _rd=data;
-            break;
-        case SP:
-            _sp=data;
-            break;
-        case OF:
-            _of=data;
-            break;
-        case IP:
-            _ip=data;
-            break;
-        default:
-            printf("should have never reached here!");
-            break;
+    if(register_code>>3==1){
+        //gets register last bit is zeroed out
+        unsigned short mem_location=getRegister(register_code^0x80);
+        _ram.setShort(mem_location,_of,data);
+    }
+    else{
+        switch(register_code){
+            case RA:
+                _ra=data;
+                break;
+            case RB:
+                _rb=data;
+                break;
+            case RC:
+                _rc=data;
+                break;
+            case RD:
+                _rd=data;
+                break;
+            case SP:
+                _sp=data;
+                break;
+            case OF:
+                _of=data;
+                break;
+            case IP:
+                _ip=data;
+                break;
+            default:
+                printf("should have never reached here!");
+                break;
+        }
     }
 }
 unsigned short Cpu::getRegister(char register_code){
@@ -241,6 +237,14 @@ unsigned short Cpu::getRegister(char register_code){
             printf("should have never reached here!");
             break;
     }
+}
+std::vector<unsigned char> Cpu::splitRegCode(unsigned char reg_byte){
+//1111 0000 = F0
+    unsigned char lower = reg_byte^0xF0;
+    //0000 1111 = 0F
+    unsigned char upper = reg_byte^0x0F;
+    upper=upper>>4;
+    return {upper,lower};
 }
 Cpu::Cpu(std::string rom_file){
     std::vector<unsigned char> rom = loadFile(rom_file);

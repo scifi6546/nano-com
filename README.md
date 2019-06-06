@@ -95,7 +95,7 @@ opcode:
 Moves constant value into a register
 ```
 opcode:
-0000 0100 [dest reg]  [constant value 2 bytes]
+0000 0100    0000 [dest reg]  [constant value 2 bytes]
 ```
 
 ## jump

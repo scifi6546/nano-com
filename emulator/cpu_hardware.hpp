@@ -63,6 +63,9 @@ class Cpu{
         void pop(char register_code);
         //pops value off of stack and returns short
         unsigned short popValue();
+
+        //generates a register code from a 1 byte containing two registers
+        std::vector<unsigned char> splitRegCode(unsigned char reg_byte);
 };
 //loads hex data of file
 std::vector<unsigned char> loadFile(std::string file_name);
