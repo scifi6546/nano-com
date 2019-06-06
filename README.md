@@ -52,6 +52,11 @@ for example
 | addu                 |  0000 1000  (0x08)    | adds two registers together      | 1 byte first 4 bits dest last 4 source   |
 | adds                 |  0000 1001  (0x09)    | adds signed                      | 1 byte first 4 bits dest last 4 source   |
 | sub                  |  0000 1010  (0x0A)    | subtracts to registers           | 1 byte first 4 bits dest last 4 source   |
+| je                   |  0000 1011  (0x0B)    | jump if equal                    | 1 byte source and dest registers         |
+| jg                   |  0000 1100  (0x0C)    | jump if source is greater        | 1 byte source and dest registers         |
+| jl                   |  0000 1101  (0x0D)    | jump if source is less           | 1 byte source and dest registers         |
+| int                  |  0000 1110  (0x0E)    | Hardware interrupt               | 2 bytes interrupt number                 |
+| intr                 |  0000 1111  (0x0F)    | Hardware interrupt register      | 1 byte register containing interrupt     |
 
 ## Offset
 Inorder to access the full range of memory sp is used as the first 4 bytes of the regiser.
