@@ -154,7 +154,62 @@ void Cpu::run_program(){
             _ip++;
             break;  
         }
+        case JE:{
+            std::vector<unsigned char> reg_codes=splitRegCode(program[_ip].arg1);
+            unsigned short arg1=getRegister(reg_codes[0]);
+            unsigned short arg2=getRegister(reg_codes[1]);
+            unsigned short address_temp =program[_ip].arg2<<8;
+            address_temp+=program[_ip].arg3;
+            if(arg1==arg2){
+                _ip=address_temp;
+            }
+            else{
+                _ip++;
+            }
+            break;
+        }
+        case JG:{
+            std::vector<unsigned char> reg_codes=splitRegCode(program[_ip].arg1);
+            unsigned short arg1=getRegister(reg_codes[0]);
+            unsigned short arg2=getRegister(reg_codes[1]);
+            unsigned short address_temp =program[_ip].arg2<<8;
+            address_temp+=program[_ip].arg3;
+            if(arg1>arg2){
+                _ip=address_temp;
+            }
+            else{
+                _ip++;
+            }
+            break;
+        }
+        case JL:{
+            std::vector<unsigned char> reg_codes=splitRegCode(program[_ip].arg1);
+            unsigned short arg1=getRegister(reg_codes[0]);
+            unsigned short arg2=getRegister(reg_codes[1]);
+            unsigned short address_temp =program[_ip].arg2<<8;
+            address_temp+=program[_ip].arg3;
+            if(arg1<arg2){
+                _ip=address_temp;
+            }
+            else{
+                _ip++;
+            }
+            break;
+        }
+        case INT:{
+            unsigned short interrupt=program[_ip].arg1<<8;
+            interrupt+=program[_ip].arg2;
+            _int(interrupt,_ra,_rb,_rc,_rd);
+            break;
+        }
+        case INTR:{
+            unsigned short reg_code=splitRegCode(program[_ip].arg1)[1];
+            _int(getRegister(reg_code),_ra,_rb,_rc,_rd);
+            break;
+        }
         default:
+            printf("invalid instruction\n");
+            return;
             break;
         }
     }
@@ -246,6 +301,17 @@ std::vector<unsigned char> Cpu::splitRegCode(unsigned char reg_byte){
     upper=upper>>4;
     return {upper,lower};
 }
+void Cpu::_int(unsigned short int_code,unsigned short arg1,
+            unsigned short arg2,unsigned short arg3,unsigned short arg4){
+                if(int_code==0x0 && arg3==0x0){
+                    init_term();
+                }
+                if(int_code==0x0 && arg3!=0x0){
+                    printf("set char\n");
+                    set_char(arg1,arg2,arg3);
+                }
+                printf("arg3: %i rc: %i\n",arg3,_rc);
+            }
 Cpu::Cpu(std::string rom_file){
     std::vector<unsigned char> rom = loadFile(rom_file);
     this->program=tokenize(rom);

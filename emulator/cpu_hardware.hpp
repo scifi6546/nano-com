@@ -2,10 +2,10 @@
 #define CPU_HARD_HPP
 #include <vector>
 #include <string>
-
+#include "terminal.hpp"
 enum INSTRUCTIONS{TERM=0x00,PUSH=0x01,POP=0x02,MOVE=0x03,MOVC=0x04,
                 JUMP=0x05,CALL=0x06,RET=0x07,ADDU=0x08,
-                ADDS=0x09,SUB=0x0A};
+                ADDS=0x09,SUB=0x0A,JE=0x0B,JG=0x0C,JL=0x0D,INT=0x0E,INTR=0x0F};
 enum REGISTER{RA=0x0,RB=0x1,RC=0x2,RD=0x3,SP=0x4,OF=0x5,IP=0x6};
 struct Token{
     INSTRUCTIONS inst=TERM;
@@ -63,6 +63,10 @@ class Cpu{
         void pop(char register_code);
         //pops value off of stack and returns short
         unsigned short popValue();
+
+        //runs hardware interrupt
+        void _int(unsigned short int_code,unsigned short arg1,
+            unsigned short arg2,unsigned short arg3,unsigned short arg4);
 
         //generates a register code from a 1 byte containing two registers
         std::vector<unsigned char> splitRegCode(unsigned char reg_byte);

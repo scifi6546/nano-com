@@ -137,3 +137,36 @@ adds two signed registers together. result is stored in dest
 opcode:
 0000 1001 [dest] [src]   0000 0000  0000 0000
 ```
+
+### je
+Jumps if two registers are equal
+```
+opcode:
+0000 1011   [reg1] [reg2]   [address to jump to (2 bytes)]
+```
+
+### jg
+Jumps if reg1 is greater than reg2
+```
+opcode:
+0000 1100   [reg1] [reg2]   [address to jump to (2 bytes)]
+```
+
+### jl
+Jumps if reg1 is less than reg2
+```
+opcode:
+0000 1101   [reg1] [reg2]   [address to jump to (2 bytes)]
+```
+### int
+Performs a hardware interrupt. See docs/interrupt.md for more details about hardware interrupts.
+```
+Opcode
+0000 1110 [2 bytes interrupt code]   0000 0000
+```
+### intr
+Performs a hardware interrupt based on value in register.
+```
+Opcode
+0000 1111   0000 [register]   0000 0000
+```
