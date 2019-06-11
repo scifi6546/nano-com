@@ -1,10 +1,9 @@
 #define TOKEN_SIZE 10
 #include <stdlib.h>
 #include <stdio.h>
-struct string{
-    char* str;
-    int str_len;
-};
+#include <string.h>
+#include <math.h>
+#include "assembler.h"
 struct string cpyword(const char* text_file){
     struct string out;
     out.str = calloc(sizeof(char),TOKEN_SIZE);
@@ -21,6 +20,43 @@ struct string cpyword(const char* text_file){
     }
     return out;
 }
+//returns a to the power of b
+int power(int a, int b){
+    int out=a;
+    for(int i=0;i<b-1;b++){
+        out*=a;
+    }
+    return out;
+}
+enum DEC_SYSTEM{BIN,OCTAL,DEC,HEX};
+//turns string into a short
+short StringtoShort(const char *in){
+    char *digits=malloc(0);
+    int digits_len=0;
+    int dec_or_hex=0;
+    for(int i=0;;i++){
+        if(in[i]=='\0')
+            break;
+        if(in[i]>='0'&&in[i]<='9'){
+            digits=realloc(digits,digits_len+1);
+                digits[i]=in[i]-'0';
+        }
+        if(in[i]=='h'){
+            dec_or_hex=1;
+            break;
+        }
+    }
+    short out=0;
+    int digit=0;
+    int raise_to=0x0A;
+    if(dec_or_hex==1)
+        raise_to=0x10;
+    for(int i=digits_len-1;i>=0;i--){
+        digit++;
+        out+=digits[i]*power(raise_to,digit);
+    }
+    return out;
+}
 struct token{
     char *comm_name;
     char *arg1;
@@ -31,6 +67,43 @@ struct token_arr{
     struct token *tokens;
     int num_tokens;
 };
+struct string addChar(struct string in,char char_in){
+    in.str=realloc(in.str,in.str_len+1);
+    in.str[in.str_len]=char_in;
+    in.str_len++;
+    return in;
+}
+//gets opcode for single register from string
+char getRegOpcodeS(const char* reg){
+    char mem_access=0x0;
+    printf("reg: %p\n",reg);
+    if(reg[0]=='\0'){
+        printf("error!!!");
+        return 0x0;
+    }
+    if(reg[0]=='['&&reg[1]!='\0'){
+        if(reg[2]==']'){
+            mem_access=0xF;
+        }
+    }
+    if(strncmp(reg,"ra",TOKEN_SIZE)==0)
+        return mem_access+0x0;
+    if(strncmp(reg,"rb",TOKEN_SIZE)==0)
+        return mem_access+0x1;
+    if(strncmp(reg,"rc",TOKEN_SIZE)==0)
+        return mem_access+0x2;
+    if(strncmp(reg,"rd",TOKEN_SIZE)==0)
+        return mem_access+0x3;
+    if(strncmp(reg,"sp",TOKEN_SIZE)==0)
+        return mem_access+0x4;
+    if(strncmp(reg,"of",TOKEN_SIZE)==0)
+        return mem_access+0x5;
+    if(strncmp(reg,"ip",TOKEN_SIZE)==0)
+        return mem_access+0x6;
+}
+char getRegOpcodeM(const char* reg1, const char *reg2){
+    return (getRegOpcodeS(reg1)<<4)+getRegOpcodeS(reg2);
+}
 enum TOKEN_PART{COMM_NAME=0x0,ARG1=0x1,ARG2=0x2,ARG3=0x3};
 //makes easy to parse tokens out of plain text
 struct token_arr tokenize(const char* plain_text,int * token_length_out){
@@ -88,15 +161,85 @@ struct token_arr tokenize(const char* plain_text,int * token_length_out){
     return out;
 }
 struct string toOpcode(const struct token_arr tokens){
+    struct string out;
+    out.str=calloc(1,0);
+    out.str_len=0;
     for(int i=0;i<tokens.num_tokens;i++){
-        
+        if(tokens.tokens[i].comm_name==0x0){
+            return out;
+        }
+        if(strncmp(tokens.tokens[i].comm_name,"term",TOKEN_SIZE)==0){
+            out=addChar(out,0x0);
+            out=addChar(out,0x0);
+            out=addChar(out,0x0);
+            out=addChar(out,0x0);
+            printf("term found\n");
+        }
+
+        if(strncmp(tokens.tokens[i].comm_name,"push",TOKEN_SIZE)==0){
+            printf("push found\n");
+            out=addChar(out,0x1);
+            out=addChar(out,getRegOpcodeS(tokens.tokens[i].arg1));
+            out=addChar(out,0x0);
+            out=addChar(out,0x0);
+        }
+        if(strncmp(tokens.tokens[i].comm_name,"pop",TOKEN_SIZE)==0){
+            out=addChar(out,0x2);
+            out=addChar(out,getRegOpcodeS(tokens.tokens[i].arg1));
+            out=addChar(out,0x0);
+            out=addChar(out,0x0);
+        }
+        if(strncmp(tokens.tokens[i].comm_name,"move",TOKEN_SIZE)==0){
+            printf("comm_name: %s\n",tokens.tokens[i].comm_name);
+            printf("strncmp: %i\n",strncmp(tokens.tokens[i].comm_name,"move",TOKEN_SIZE));
+            printf("move called\n");
+            out=addChar(out,0x3);
+            out=addChar(out,getRegOpcodeM(tokens.tokens[i].arg1,tokens.tokens[i].arg2));
+            out=addChar(out,0x0);
+            out=addChar(out,0x0);
+        }
+        if(strncmp(tokens.tokens[i].comm_name,"movc",TOKEN_SIZE)==0){
+            out=addChar(out,0x4);
+            out=addChar(out,getRegOpcodeS(tokens.tokens[i].arg1));
+            short num=StringtoShort(tokens.tokens[i].arg2);
+            out=addChar(out,num>>8);
+            num=num&0x0f;
+            out=addChar(out,num);
+        }
+        if(strncmp(tokens.tokens[i].comm_name,"jump",TOKEN_SIZE)==0){
+            out=addChar(out,0x5);
+            short num=StringtoShort(tokens.tokens[i].arg1);
+            out=addChar(out,num>>8);
+            num=num&0x0f;
+            out=addChar(out,num);
+            out=addChar(out,0x0);
+        }
+        if(strncmp(tokens.tokens[i].comm_name,"call",TOKEN_SIZE)==0){
+            out=addChar(out,0x6);
+            short num=StringtoShort(tokens.tokens[i].arg1);
+            out=addChar(out,num>>8);
+            num=num&0x0f;
+            out=addChar(out,num);
+            out=addChar(out,0x0);
+        }
+        if(strncmp(tokens.tokens[i].comm_name,"ret",TOKEN_SIZE)==0){
+            out=addChar(out,0x7);
+            out=addChar(out,0x0);
+            out=addChar(out,0x0);
+            out=addChar(out,0x0);
+        }
+
     }
 }
-char * makeBin(const char* plain_text){
+struct string makeBin(const char* plain_text){
     int* length=calloc(sizeof(int),1);
     struct token_arr temp = tokenize(plain_text,length);
+    struct string out = toOpcode(temp);
+    /* 
     for(int i=0;i<temp.num_tokens;i++){
         printf("token[0].comm: %s token[0].arg1: %s token[0].arg2: %s token[0].arg3: %s\n",temp.tokens[i].comm_name,temp.tokens[i].arg1,
             temp.tokens[i].arg2,temp.tokens[i].arg3); 
-    }
+    }*/
+    //printf("opcode: %s\n",out.str);
+    return out;
 }
