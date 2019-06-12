@@ -31,6 +31,7 @@ int power(int a, int b){
 enum DEC_SYSTEM{BIN,OCTAL,DEC,HEX};
 //turns string into a short
 short StringtoShort(const char *in){
+    printf("char in: %s\n",in);
     char *digits=malloc(0);
     int digits_len=0;
     int dec_or_hex=0;
@@ -38,23 +39,39 @@ short StringtoShort(const char *in){
         if(in[i]=='\0')
             break;
         if(in[i]>='0'&&in[i]<='9'){
+            printf("num found\n");
             digits=realloc(digits,digits_len+1);
-                digits[i]=in[i]-'0';
+            digits_len++;
+            digits[i]=in[i]-'0';
+        }
+        if(in[i]=='O'){
+            dec_or_hex=OCTAL;
+            break;
+        }
+        if(in[i]=='D'){
+            dec_or_hex=DEC;
+            break;
         }
         if(in[i]=='h'){
-            dec_or_hex=1;
+            dec_or_hex=HEX;
             break;
         }
     }
     short out=0;
     int digit=0;
     int raise_to=0x0A;
-    if(dec_or_hex==1)
+    if(dec_or_hex==HEX)
         raise_to=0x10;
+    printf("out (before) %i\n",out);
+    printf("digits_len: %i\n",digits_len);
     for(int i=digits_len-1;i>=0;i--){
         digit++;
+        printf("raise_to: %i digit: %i\n",raise_to,digit);
+        printf("power: %i\n",power(raise_to,digit));
         out+=digits[i]*power(raise_to,digit);
+        printf("out: %i\n",out);
     }
+    printf("out final: %i\n",out);
     return out;
 }
 struct token{
@@ -67,6 +84,7 @@ struct token_arr{
     struct token *tokens;
     int num_tokens;
 };
+//adds char to end of string reallocs dynamically
 struct string addChar(struct string in,char char_in){
     in.str=realloc(in.str,in.str_len+1);
     in.str[in.str_len]=char_in;
